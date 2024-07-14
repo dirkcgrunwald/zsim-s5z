@@ -22,7 +22,7 @@ libEnv["LIBPATH"] += libEnv["PINLIBPATH"]
 libEnv["LIBS"] += libEnv["PINLIBS"]
 
 # Build syscall name file
-def getSyscalls(): return os.popen("python ../../misc/list_syscalls.py").read().strip()
+def getSyscalls(): return os.popen("python2 ../../misc/list_syscalls.py").read().strip()
 syscallSrc = libEnv.Substfile("virt/syscall_name.cpp", "virt/syscall_name.cpp.in",
         SUBST_DICT = {"SYSCALL_NAME_LIST" : getSyscalls()})
 
@@ -35,7 +35,7 @@ libEnv.SharedLibrary("zsim.so", libSrcs)
 
 # Build tracing utilities (need hdf5 & dynamic linking)
 traceEnv = env.Clone()
-traceEnv["LIBS"] += ["hdf5", "hdf5_hl"]
+traceEnv["LIBS"] += ["hdf5_serial", "hdf5_serial_hl"]
 traceEnv["OBJSUFFIX"] += "t"
 traceEnv.Program("dumptrace", ["dumptrace.cpp", "access_tracing.cpp", "memory_hierarchy.cpp"] + commonSrcs)
 traceEnv.Program("sorttrace", ["sorttrace.cpp", "access_tracing.cpp"] + commonSrcs)
